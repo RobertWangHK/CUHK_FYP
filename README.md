@@ -1,1 +1,1 @@
-# Online movie recommender system implemented with serendipitous algorithm
+# Online movie recommender system
