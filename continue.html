@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Theme Made By www.w3schools.com - No Copyright -->
+    <title>Bootstrap Theme Simply Me</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .bg-1 {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+        .container-fluid {
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+        .loader {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            left: 45%;
+            top: 40%;
+            top: 45%;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            -webkit-animation: spin 5s linear infinite;
+            animation: spin 5s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #block1{
+            display: none;
+        }
+
+
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+	#panel {
+  		width: 855px;
+  		margin:0 auto;
+  		text-align: center;
+	}
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid bg-1 text-center" id = "block1" style="height: 100%">
+    <div id = "panel">
+    <h3>In the next page, you will be given 10 recommendations<br>
+	Please answer whether you have heard of and how much you like it<br>
+	In case you haven't seen this movie, please rate according to how much you want to see it</h3>
+    <div class="container-fluid bg-1 text-center" style="height: 100%">
+        <a href="feedback.html"><img src="http://52.221.251.137:3000/image/continue.jpg" class="img-circle" alt="Bird" width="350" height="350"></a>
+    </div>
+    </div>
+</div>
+
+<div class="container-fluid bg-1 text-center" id = "block2" style="height: 100%">
+    <div class="loader"></div>
+</div>
+
+<script>
+    setTimeout(function(){
+        document.getElementById("block2").style.display = 'none';
+        document.getElementById("block1").style.display = 'block';
+    }, 10000);
+</script>
+</body>
+</html>

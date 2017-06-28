@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Theme Made By www.w3schools.com - No Copyright -->
+    <title>Bootstrap Theme Simply Me</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .bg-1 {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+        .bg-2 {
+            background-color: #474e5d;
+            color: #ffffff;
+        }
+        .bg-3 {
+            background-color: #ffffff;
+            color: #555555;
+        }
+        .container-fluid {
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid bg-1 text-center">
+    <h3 id = "name">FYP</h3>
+    <img src="http://52.221.251.137:3000/image/end.jpg" class="img-circle" alt="Bird" width="350" height="350">
+    <h3>Kate Hu</h3>
+    <h3>Robert Wang</h3>
+</div>
+
+<script>
+    username=getCookie('fyp');
+    //alert(username);
+    $("#name").text(username + ", thank you for your feedback!");
+    function getCookie(c_name)
+    {
+        if (document.cookie.length>0)
+        {
+            c_start=document.cookie.indexOf(c_name + "=");
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1;
+                c_end=document.cookie.indexOf(";",c_start);
+                if (c_end==-1) c_end=document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end))
+            }
+        }
+        return ""
+    }
+</script>
+</body>
+
+</html>

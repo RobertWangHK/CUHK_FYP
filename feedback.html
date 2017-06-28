@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Theme Made By www.w3schools.com - No Copyright -->
+    <title>Bootstrap Theme Simply Me</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+    <script>
+    </script>
+    <script src="app.js"></script>
+    <style>
+        img {
+            max-width:100%;
+            max-height:100%;
+        }
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+            background-color: #555;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 632px;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {height:auto;}
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid text-center">
+    </div>
+</nav>
+<div class="container-fluid text-center">
+    <div class="row content">
+        <div class="col-sm-3 sidenav"></div>
+        <div class="col-sm-6 text-left">
+            <h1 id = "mymovie">Movie Name</h1>
+            <div class="row">
+                <div class="col-sm-4" style="height: 310px;" >
+                    <img id = "myimg"  style="width: 100%;">
+                </div>
+                <div class="col-sm-8" style="height: 310px;">
+		            <iframe id="myvideo" style="width: 100%; height: 100%" class="embed-responsive-item" autoplay="1" frameborder="0"></iframe>
+                </div>
+            </div>
+            <hr>
+            <p id = "mypanel">temp_description</p>
+            <div id = "block1"><p>Do you know this movie before?</p>
+                <div id="question1" class="btn-group btn-group-lg">
+                    <button type="button" class="btn btn-primary">yes</button>
+                    <button type="button" class="btn btn-primary">no</button>
+                </div>
+            </div>
+            <div id = "block2"><p>1 is for most dislike and 5 is for most likes.</p>
+                <div id="score" class="btn-group btn-group-lg">
+                    <button type="button" class="btn btn-primary">1</button>
+                    <button type="button" class="btn btn-primary">2</button>
+                    <button type="button" class="btn btn-primary">3</button>
+                    <button type="button" class="btn btn-primary">4</button>
+                    <button type="button" class="btn btn-primary">5</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 sidenav"></div>
+    </div>
+</div>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid text-center">
+    </div>
+</nav>
+
+<script>
+    var socket = io.connect('http://52.221.251.137:8080');
+    var base_image = "http://52.221.251.137:3000/";
+    var movie_feedback = {};
+    var rate;
+    var movie_id = "";
+    var index = 0;
+    var num_movie = 10;
+    var movie_id_num = "";
+    bind_socket();
+    $(document).ready(function(){
+	    username = checkCookie();
+        socket.emit('phase2_start', username);
+        socket.emit('phase2_next', '0');
+        $("#block2").hide();
+        $("#question1 :button").on('click', function() {
+            rate = this.innerHTML;
+            if(rate.match("yes")){
+                movie_feedback[movie_id_num].push("1");
+            }
+            else{
+                movie_feedback[movie_id_num].push("0");
+            }
+            $("#block1").hide();
+            $("#block2").show();
+        });
+        $("#score :button").on('click', function() {
+            index++;
+            $("#block1").show();
+            $("#block2").hide();
+            rate = this.innerHTML;
+            movie_feedback[movie_id_num].push(rate);
+            if(index == num_movie){
+                var jsonString = JSON.stringify(movie_feedback);
+                socket.emit('phase2_result',jsonString);
+                window.location.href = "end.html";
+            }
+            socket.emit('phase2_next', index.toString());
+        });
+    });
+
+    function bind_socket(){
+        //socket.on('message', function(message) {
+        //    alert(message);
+        //});
+        socket.on('movie_name', function(movie_name) {
+            $("#mymovie").text(movie_name);
+            set_movie_url(movie_name);
+        });
+        socket.on('movie_description', function(movie_description) {
+            $("#mypanel").text(movie_description);
+        });
+        socket.on('movie_image', function(movie_image) {
+            $("#myimg").attr("src", movie_image);
+        });
+        socket.on('movie_id', function(movie_id) {
+            movie_feedback[movie_id] = new Array();
+            movie_id_num = movie_id;
+        });
+    }
+
+    function set_movie_url(movie_name){
+        $("#myvideo").attr("src","");
+        $("#myvideo").hide();
+        $("#myvideo").show();
+        basic_url = 'http://www.youtube.com/embed?listType=search&list=trailer ';
+        taeget_url = basic_url + movie_name;
+        $("#myvideo").attr("src",taeget_url);
+    }
+
+    function getCookie(c_name)
+    {
+        if (document.cookie.length>0)
+        {
+            c_start=document.cookie.indexOf(c_name + "=");
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1;
+                c_end=document.cookie.indexOf(";",c_start);
+                if (c_end==-1) c_end=document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end))
+            }
+        }
+        return ""
+    }
+
+    function setCookie(c_name,value,expiredays)
+    {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate()+expiredays);
+        document.cookie=c_name+ "=" +escape(value)+
+                ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+    }
+
+    function checkCookie()
+    {
+        username=getCookie('fyp');
+        if (username!=null && username!="") {
+            return username;
+        }
+        else
+        {
+            alert("Please start from the starter page");
+            window.location.href = "index.html";
+        }
+        return username;
+    }
+</script>
+
+</body>
